@@ -8,7 +8,7 @@ export default class extends React.Component {
     items: React.PropTypes.instanceOf(Immutable.Set)
   }
 
-  handleClick(item) {
+  _handleClick(item) {
     this.props.onClick(item);
   }
 
@@ -16,7 +16,7 @@ export default class extends React.Component {
     const elements = this.props.items.map((item) => {
       const name = item.get('name');
       return (
-        <ListGroupItem key={name} onClick={this.handleClick.bind(this, item)}>
+        <ListGroupItem key={name} onClick={this._handleClick.bind(this, item)}>
           <span>{name}: {item.get('amount')}g</span>
           <Glyphicon glyph="minus" className="pull-right"/>
         </ListGroupItem>

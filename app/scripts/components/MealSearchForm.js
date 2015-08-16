@@ -7,17 +7,18 @@ export default class extends React.Component {
     items: React.PropTypes.instanceOf(Immutable.List)
   }
 
-  handleChange(event) {
+  _handleChange(event) {
     this.props.onUserInput(event.target.value);
   }
 
   render() {
     return (
       <div className="meal-search-form">
-        <Input type='text'
-               placeholder='Search...'
-               onChange={this.handleChange.bind(this)}
-               value={this.props.searchText}/>
+        <Input
+          type='text'
+          placeholder='Search...'
+          onChange={this._handleChange.bind(this)}
+          value={this.props.searchText}/>
       </div>
     );
   }

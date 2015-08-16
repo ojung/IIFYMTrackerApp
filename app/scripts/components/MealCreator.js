@@ -14,21 +14,22 @@ export default class extends React.Component {
 
   constructor(props) {
     super(props);
-    const selectedItems = Immutable.Set();
-    const searchText = '';
-    this.state = {searchText, selectedItems};
+    this.state = {
+      searchText: '',
+      selectedItems: Immutable.Set(),
+    };
   }
 
-  handleUserInput(searchText) {
+  _handleUserInput(searchText) {
     this.setState(_.extend({}, this.state, {searchText}));
   }
 
-  removeItem(item) {
+  _removeItem(item) {
     const selectedItems = this.state.selectedItems.subtract([item]);
     this.setState(_.extend({}, this.state, {selectedItems}));
   }
 
-  addItem(item) {
+  _addItem(item) {
     const selectedItems = this.state.selectedItems.add(item);
     this.setState(_.extend({}, this.state, {selectedItems}));
   }
@@ -41,12 +42,15 @@ export default class extends React.Component {
     return (
       <Col md={4}>
         <Panel>
-          <MealSearchForm searchText={this.state.searchText}
-                          onUserInput={this.handleUserInput.bind(this)}/>
-          <SelectedItems items={this.state.selectedItems}
-                         onClick={this.removeItem.bind(this)}/>
-          <FilterableSearchResults items={filteredResults}
-                                   onClick={this.addItem.bind(this)}/>
+          <MealSearchForm
+            searchText={this.state.searchText}
+            onUserInput={this._handleUserInput.bind(this)}/>
+          <SelectedItems
+            items={this.state.selectedItems}
+            onClick={this._removeItem.bind(this)}/>
+          <FilterableSearchResults
+            items={filteredResults}
+            onClick={this._addItem.bind(this)}/>
         </Panel>
       </Col>
     );
@@ -59,5 +63,6 @@ function matchesSearchText(searchText, result) {
 }
 
 function isNotSelected(selectedItems, result) {
-  return !selectedItems.has(result);
+  const name = result.get('name');
+  return !selectedItems.find((item) => item.get('name') === name);
 }
