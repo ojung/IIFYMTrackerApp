@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
+import {Glyphicon, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 
 export default class extends React.Component {
   static propTypes = {
@@ -13,22 +14,21 @@ export default class extends React.Component {
 
   render() {
     const elements = this.props.items.map((item) => {
+      const name = item.get('name');
       return (
-        <li key={item.get('name')} className="list-group-item"
-                                   onClick={this.handleClick.bind(this, item)}>
-          <span>{item.get('name')}: {item.get('amount')}g </span>
-          <i className="glyphicon glyphicon-minus pull-right"></i>
-        </li>
+        <ListGroupItem key={name} onClick={this.handleClick.bind(this, item)}>
+          <span>{name}: {item.get('amount')}g</span>
+          <Glyphicon glyph="minus" className="pull-right"/>
+        </ListGroupItem>
       );
     });
 
     return (
-      <div className="meal-selected-items">
-        <h3>Selected Items</h3>
-        <ul className="list-group">
-        {elements}
-        </ul>
-      </div>
+      <Panel collapsible
+             expanded={!this.props.items.isEmpty()}
+             header={(<h3>Selected Items</h3>)}>
+        <ListGroup>{elements}</ListGroup>
+      </Panel>
     );
   }
 }

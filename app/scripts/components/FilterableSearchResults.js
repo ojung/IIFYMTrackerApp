@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
+import {Glyphicon, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 
 export default class extends React.Component {
   static propTypes = {
@@ -11,21 +12,24 @@ export default class extends React.Component {
     this.props.onClick(item);
   }
 
+  // TODO: create SearchResult subcomponent containing the ListGroupItem
+  // or <span> and the hidden modal. This component will be responsible for
+  // holding the visibility state of the modal and calling back the parent
+  // (this) to report any changes in the amount number input
   render() {
     const elements = this.props.items.map((item) => {
+      const name = item.get('name');
       return (
-        <li key={item.get('name')} className="list-group-item"
-                                   onClick={this.handleClick.bind(this, item)}>
-          <span>{item.get('name')} </span>
-          <i className="glyphicon glyphicon-plus pull-right"></i>
-        </li>
+        <ListGroupItem key={name} onClick={this.handleClick.bind(this, item)}>
+          <span>{name} </span><Glyphicon glyph="plus" className="pull-right"/>
+        </ListGroupItem>
       );
     });
+
     return (
-      <div className="filterable-search-results">
-        <h3>Search Results</h3>
-        <ul className="list-group"> {elements} </ul>
-      </div>
+      <Panel header={(<h3>Search Results</h3>)}>
+        <ListGroup>{elements}</ListGroup>
+      </Panel>
     );
   }
 }
