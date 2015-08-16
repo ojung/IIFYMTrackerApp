@@ -27,12 +27,18 @@ dist/styles/%.css: app/styles/%.css
 	mkdir -p $(@D)
 	cp $< $@
 
+FONTS = $(shell find app/fonts)
+fonts: dist/fonts
+dist/fonts: app/fonts
+	mkdir -p $(@D)
+	cp -r $< $@
+
 watch:
 	$(WATCHIFY) --verbose -o $(TARGET) -t [ $(BABELIFY) ] -- $(ALL_SCRIPTS)
 
 lint:
 	$(ESLINT) $(ALL_SCRIPTS)
 
-compile: scripts html css
+compile: scripts html css fonts
 
 .PHONY: compile watch lint scripts css html
