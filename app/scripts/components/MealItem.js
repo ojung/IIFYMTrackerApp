@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import {Dialog, ListItem, TextField, SvgIcon, FontIcon} from 'material-ui';
+import {Dialog, ListItem, TextField} from 'material-ui';
 
 import Add from './svg-icons/Add.jsx';
 

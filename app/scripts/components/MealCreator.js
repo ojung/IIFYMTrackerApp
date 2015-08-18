@@ -16,7 +16,7 @@ export default class extends React.Component {
     super(props);
     this.state = {
       searchText: '',
-      selectedItems: Immutable.Set(),
+      selectedItems: new Immutable.Set(),
     };
   }
 

@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
-import {Paper, TextField} from 'material-ui';
+import {TextField} from 'material-ui';
 
 export default class extends React.Component {
   static propTypes = {

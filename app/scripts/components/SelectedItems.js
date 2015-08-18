@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
-import {ContentInbox, List, ListItem, Paper, SvgIcon} from 'material-ui';
+import {List, ListItem, Paper} from 'material-ui';
 
 import Remove from './svg-icons/Remove';
 
@@ -20,7 +20,6 @@ export default class extends React.Component {
         <List subheader="Selected Items">
           {this.props.items.map((item) => {
             const name = item.get('name');
-            const primaryText = name + ': ' + item.get('amount') + 'g';
             return (
               <ListItem
                 key={name}
