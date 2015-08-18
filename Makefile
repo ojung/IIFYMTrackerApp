@@ -7,11 +7,10 @@ BABELIFY = babelify --stage 0
 SOURCE = app/scripts/app.js
 TARGET = dist/scripts/app.js
 
-COMPONENTS = $(shell find app/scripts/components -name "*.js")
-ALL_SCRIPTS = $(COMPONENTS) $(SOURCE)
+SCRIPTS = $(shell find app/scripts -name "*.js")
 
 scripts: $(TARGET)
-$(TARGET): $(ALL_SCRIPTS) node_modules
+$(TARGET): $(SCRIPTS) node_modules
 	mkdir -p $(@D)
 	$(BROWSERIFY) $(SOURCE) -o $(TARGET) -t [ $(BABELIFY) ]
 
@@ -34,10 +33,10 @@ dist/fonts: app/fonts
 	cp -r $< $@
 
 watch:
-	$(WATCHIFY) --verbose -o $(TARGET) -t [ $(BABELIFY) ] -- $(ALL_SCRIPTS)
+	$(WATCHIFY) --verbose -o $(TARGET) -t [ $(BABELIFY) ] -- $(SCRIPTS)
 
 lint:
-	$(ESLINT) $(ALL_SCRIPTS)
+	$(ESLINT) $(SCRIPTS)
 
 compile: scripts html css fonts
 
