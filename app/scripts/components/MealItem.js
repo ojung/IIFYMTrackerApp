@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import {Dialog, ListItem, TextField} from 'material-ui';
 
-import Add from './svg-icons/Add.jsx';
+import Add from './svg-icons/Add';
 
 export default class extends React.Component {
   static propTypes = {
