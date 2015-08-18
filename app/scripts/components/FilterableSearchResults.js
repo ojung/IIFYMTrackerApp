@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
-import {ListGroup, Panel} from 'react-bootstrap';
+import {List, Paper} from 'material-ui';
 
 import MealItem from './MealItem';
 
@@ -16,20 +16,20 @@ export default class extends React.Component {
   }
 
   render() {
-    const elements = this.props.items.map((item) => {
-      const name = item.get('name');
-      return (
-          <MealItem
-            key={name}
-            itemName={name}
-            handleSubmit={this._handleSubmit.bind(this, item)}/>
-      );
-    });
-
     return (
-      <Panel header={(<h3>Search Results</h3>)}>
-        <ListGroup>{elements}</ListGroup>
-      </Panel>
+      <Paper zDepth={1}>
+        <List subheader="Search Results">
+          {this.props.items.map((item) => {
+            const name = item.get('name');
+            return (
+              <MealItem
+                key={name}
+                itemName={name}
+                handleSubmit={this._handleSubmit.bind(this, item)}/>
+            );
+          })}
+        </List>
+      </Paper>
     );
   }
 }

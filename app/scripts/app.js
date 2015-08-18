@@ -1,10 +1,11 @@
 import Immutable from 'immutable';
 import React from 'react';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import mui from 'material-ui';
 
 import MealCreator from './components/MealCreator';
 
-window.React = React;
-const mountNode = document.getElementById('app');
+const ThemeManager = new mui.Styles.ThemeManager();
 
 const SEARCHRESULTS = Immutable.fromJS([
   {name: 'Potatoes'},
@@ -27,4 +28,25 @@ const SEARCHRESULTS = Immutable.fromJS([
   return isIndexed ? value.toList() : value.toOrderedMap();
 });
 
-React.render(<MealCreator searchResults={SEARCHRESULTS}/>, mountNode);
+window.React = React;
+
+injectTapEventPlugin();
+
+class ParentComponent extends React.Component {
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  }
+
+  render() {
+    return <MealCreator searchResults={SEARCHRESULTS}/>;
+  }
+}
+
+ParentComponent.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
+
+const mountNode = document.getElementById('app');
+React.render(<ParentComponent/>, mountNode);

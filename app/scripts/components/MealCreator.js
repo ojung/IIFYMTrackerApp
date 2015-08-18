@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Immutable from 'immutable';
 import React from 'react';
-import {Col, Panel} from 'react-bootstrap';
+import {AppBar, FlatButton} from 'material-ui';
 
 import FilterableSearchResults from './FilterableSearchResults';
 import MealSearchForm from './MealSearchForm';
@@ -40,19 +40,20 @@ export default class extends React.Component {
       .filter(matchesSearchText.bind(null, this.state.searchText));
 
     return (
-      <Col md={4}>
-        <Panel>
-          <MealSearchForm
-            searchText={this.state.searchText}
-            onUserInput={this._handleUserInput.bind(this)}/>
-          <SelectedItems
-            items={this.state.selectedItems}
-            onClick={this._removeItem.bind(this)}/>
-          <FilterableSearchResults
-            items={filteredResults}
-            onClick={this._addItem.bind(this)}/>
-        </Panel>
-      </Col>
+      <div>
+        <AppBar
+          title="MealCreator"
+          iconElementRight={<FlatButton label="Save"/>}/>
+        <MealSearchForm
+          searchText={this.state.searchText}
+          onUserInput={this._handleUserInput.bind(this)}/>
+        <SelectedItems
+          items={this.state.selectedItems}
+          onClick={this._removeItem.bind(this)}/>
+        <FilterableSearchResults
+          items={filteredResults}
+          onClick={this._addItem.bind(this)}/>
+      </div>
     );
   }
 }

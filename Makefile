@@ -7,11 +7,11 @@ BABELIFY = babelify --stage 0
 SOURCE = app/scripts/app.js
 TARGET = dist/scripts/app.js
 
-COMPONENTS = $(wildcard app/scripts/components/*.js)
-ALL_SCRIPTS = $(COMPONENTS) app/scripts/app.js
+COMPONENTS = $(shell find app/scripts/components -name "*.js")
+ALL_SCRIPTS = $(COMPONENTS) $(SOURCE)
 
-scripts: dist/scripts/app.js
-dist/scripts/app.js: $(ALL_SCRIPTS) node_modules
+scripts: $(TARGET)
+$(TARGET): $(ALL_SCRIPTS) node_modules
 	mkdir -p $(@D)
 	$(BROWSERIFY) $(SOURCE) -o $(TARGET) -t [ $(BABELIFY) ]
 

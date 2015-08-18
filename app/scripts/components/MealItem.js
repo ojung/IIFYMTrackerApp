@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
-import {Button, Glyphicon, Input, ListGroupItem, Modal} from 'react-bootstrap';
+import {Dialog, ListItem, TextField, SvgIcon, FontIcon} from 'material-ui';
+
+import Add from './svg-icons/Add.jsx';
 
 export default class extends React.Component {
   static propTypes = {
@@ -12,22 +14,21 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
       amount: props.amount || '',
     };
   }
 
-  _close() {
-    this.setState(_.extend({}, this.state, {showModal: false}))
+  _open() {
+    this.refs.addOrEditMealDialog.show();
   }
 
-  _open() {
-    this.setState(_.extend({}, this.state, {showModal: true}))
+  _close() {
+    this.refs.addOrEditMealDialog.dismiss();
   }
 
   _submit() {
+    this._close();
     this.props.handleSubmit(this.state.amount);
-    this.setState(_.extend({}, this.state, {showModal: false}))
   }
 
   _onChange(event) {
@@ -35,41 +36,31 @@ export default class extends React.Component {
     this.setState(_.extend({}, this.state, {amount: newAmount}));
   }
 
-  _onKeyPress(event) {
-    const enterKeyCode = 13;
-    if (event.which === enterKeyCode) {
-      this._submit.call(this);
-    }
-  }
-
   render() {
+    const actions = [
+      {text: 'Cancel', onClick: this._close.bind(this)},
+      {text: 'Submit', onClick: this._submit.bind(this)}
+    ];
+
     return (
-      <ListGroupItem onClick={this._open.bind(this)}>
-        <span>{this.props.itemName}</span>
-        <Glyphicon glyph="plus" className="pull-right"/>
-        <Modal
-          show={this.state.showModal}
-          onHide={this._close.bind(this)}
-          onKeyPress={this._onKeyPress.bind(this)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add/Edit Item</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <h4>{this.props.itemName}</h4>
-            <Input
-              type='number'
-              onChange={this._onChange.bind(this)}
-              value={this.state.amount}
-              addonAfter="g"
-              addonBefore="amount"
-              autoFocus/>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this._close.bind(this)}>Cancel</Button>
-            <Button onClick={this._submit.bind(this)}>Add</Button>
-          </Modal.Footer>
-        </Modal>
-      </ListGroupItem>
+      <div>
+        <ListItem
+          primaryText={this.props.itemName}
+          onClick={this._open.bind(this)}
+          rightIcon={<Add/>}/>
+        <Dialog
+          title="Add/Edit Item"
+          actions={actions}
+          modal={true}
+          ref="addOrEditMealDialog">
+          <TextField
+            type="number"
+            floatingLabelText="amount"
+            onChange={this._onChange.bind(this)}
+            style={{width: '100%'}}
+            autoFocus/>
+        </Dialog>
+      </div>
     );
   }
 }

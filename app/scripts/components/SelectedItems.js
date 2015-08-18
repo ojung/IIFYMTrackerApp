@@ -1,11 +1,13 @@
 import Immutable from 'immutable';
 import React from 'react';
-import {Glyphicon, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import {ContentInbox, List, ListItem, Paper, SvgIcon} from 'material-ui';
+
+import Remove from './svg-icons/Remove';
 
 export default class extends React.Component {
   static propTypes = {
     onClick: React.PropTypes.func,
-    items: React.PropTypes.instanceOf(Immutable.Set)
+    items: React.PropTypes.instanceOf(Immutable.Set),
   }
 
   _handleClick(item) {
@@ -13,22 +15,28 @@ export default class extends React.Component {
   }
 
   render() {
-    const elements = this.props.items.map((item) => {
-      const name = item.get('name');
-      return (
-        <ListGroupItem key={name} onClick={this._handleClick.bind(this, item)}>
-          <span>{name}: {item.get('amount')}g</span>
-          <Glyphicon glyph="minus" className="pull-right"/>
-        </ListGroupItem>
-      );
-    });
-
     return (
-      <Panel collapsible
-             expanded={!this.props.items.isEmpty()}
-             header={(<h3>Selected Items</h3>)}>
-        <ListGroup>{elements}</ListGroup>
-      </Panel>
+      <Paper zDepth={1}>
+        <List subheader="Selected Items">
+          {this.props.items.map((item) => {
+            const name = item.get('name');
+            const primaryText = name + ': ' + item.get('amount') + 'g';
+            return (
+              <ListItem
+                key={name}
+                onClick={this._handleClick.bind(this, item)}
+                rightIcon={<Remove/>}>
+                <span>{name}</span>
+                <span style={{
+                  fontFamily: 'Roboto-Light',
+                  fontSize: '12px',
+                  float: 'right'
+                }}>{item.get('amount')}g</span>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Paper>
     );
   }
 }
