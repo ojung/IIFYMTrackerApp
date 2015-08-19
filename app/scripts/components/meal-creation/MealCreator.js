@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import React from 'react';
-import {AppBar, FlatButton} from 'material-ui';
 
 import FilterableSearchResults from './FilterableSearchResults';
 import MealSearchForm from './MealSearchForm';
@@ -45,7 +44,7 @@ export default class extends React.Component {
 
   _addItem(item) {
     const selectedItems = this.state.selectedItems.add(item);
-    immutableSetState(this, {selectedItems});
+    immutableSetState(this, {selectedItems, searchText: ''});
   }
 
   render() {
@@ -55,9 +54,6 @@ export default class extends React.Component {
 
     return (
       <div>
-        <AppBar
-          title="MealCreator"
-          iconElementRight={<FlatButton label="Save"/>}/>
         <MealSearchForm
           searchText={this.state.searchText}
           onUserInput={this._handleUserInput.bind(this)}/>

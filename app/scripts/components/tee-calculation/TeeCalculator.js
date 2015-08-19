@@ -1,15 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import {
-  AppBar,
   DropDownMenu,
-  IconButton,
   RadioButton,
   RadioButtonGroup,
   TextField,
 } from 'material-ui';
 
-import Back from '../svg-icons/Back';
 import immutableSetState from '../../common/immutableSetState';
 
 export default class extends React.Component {
@@ -59,9 +56,6 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <AppBar
-          iconElementLeft={<IconButton><Back/></IconButton>}
-          title="TeeCalculator"/>
         <div style={{padding: '15px'}}>
           <TextField
             type='number'

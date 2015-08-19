@@ -4,6 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import mui from 'material-ui';
 
 import MealCreator from './components/meal-creation/MealCreator';
+import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
 
 const ThemeManager = new mui.Styles.ThemeManager();
@@ -22,7 +23,12 @@ class App extends React.Component {
   }
 
   render() {
-    return <RouteHandler/>;
+    return (
+      <div>
+        <Menu/>
+        <RouteHandler/>
+      </div>
+    );
   }
 }
 
