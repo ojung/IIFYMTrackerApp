@@ -35,24 +35,22 @@ export default class extends React.Component {
   }
 
   _handleActivityLevelChange = (_event, _selectedIndex, menuItem) => {
-    this.setState(_.extend({}, this.state, {
-      physicalActivityFactor: menuItem.payload
-    }));
+    immutableSetState(this, {physicalActivityFactor: menuItem.payload});
   }
 
-  _handleGenderChange = (_event, selectedItem) => {
-    this.setState(_.extend({}, this.state, {gender: selectedItem}));
+  _handleSexChange = (_event, selectedItem) => {
+    immutableSetState(this, {sex: selectedItem});
   }
 
   _getResult = () => {
-    if (_(this.state).size() <= 4) {
-      return 0;
+    if (!_(this.state).values().all(Boolean)) {
+      return '';
     }
 
-    const {weight, height, age, gender, physicalActivityFactor} = this.state;
-    const genderParameter = {none: 83, female: -161, male: 5}[gender];
+    const {weight, height, age, sex, physicalActivityFactor} = this.state;
+    const sexParameter = {female: -161, male: 5}[sex];
     const restingEnergyExpenditure =
-      (10 * weight + 6.25 * height - 5 * age + genderParameter);
+      (10 * weight + 6.25 * height - 5 * age + sexParameter);
 
     return Math.floor(restingEnergyExpenditure * physicalActivityFactor);
   }
@@ -61,7 +59,7 @@ export default class extends React.Component {
     return (
       <div>
         <AppBar title="TeeCalculator"/>
-        <Paper zDepth={1} style={{padding: '10px'}}>
+        <Paper zDepth={1} style={{padding: '10px', marginTop: '10px'}}>
           <TextField
             type='number'
             floatingLabelText='Weight'
@@ -83,11 +81,10 @@ export default class extends React.Component {
             onChange={this._handleTextFieldChange.bind(this, 'age')}
             style={{width: '90%'}}
             value={this.state.age}/>
-          <h4>Gender</h4>
-          <RadioButtonGroup name="gender" onChange={this._handleGenderChange}>
+          <h4>Sex</h4>
+          <RadioButtonGroup name="sex" onChange={this._handleSexChange}>
             <RadioButton value="male" label="Male"/>
-            <RadioButton value="female" label="Femal"/>
-            <RadioButton value="none" label="Inbetween"/>
+            <RadioButton value="female" label="Female"/>
           </RadioButtonGroup>
           <h4>Activity Level</h4>
           <DropDownMenu
