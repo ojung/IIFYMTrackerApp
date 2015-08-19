@@ -3,12 +3,13 @@ import React from 'react';
 import {
   AppBar,
   DropDownMenu,
-  Paper,
+  IconButton,
   RadioButton,
   RadioButtonGroup,
   TextField,
 } from 'material-ui';
 
+import Back from '../svg-icons/Back';
 import immutableSetState from '../../common/immutableSetState';
 
 export default class extends React.Component {
@@ -58,28 +59,30 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <AppBar title="TeeCalculator"/>
-        <Paper zDepth={1} style={{padding: '10px', marginTop: '10px'}}>
+        <AppBar
+          iconElementLeft={<IconButton><Back/></IconButton>}
+          title="TeeCalculator"/>
+        <div style={{padding: '15px'}}>
           <TextField
             type='number'
             floatingLabelText='Weight'
             hintText='Enter your Weight in kg'
             onChange={this._handleTextFieldChange.bind(this, 'weight')}
-            style={{width: '90%'}}
+            style={{width: '100%'}}
             value={this.state.weight}/>
           <TextField
             type='number'
             floatingLabelText='Height'
             hintText='Enter your Height in cm'
             onChange={this._handleTextFieldChange.bind(this, 'height')}
-            style={{width: '90%'}}
+            style={{width: '100%'}}
             value={this.state.height}/>
           <TextField
             type='number'
             floatingLabelText='Age'
             hintText='Enter your Age in Years'
             onChange={this._handleTextFieldChange.bind(this, 'age')}
-            style={{width: '90%'}}
+            style={{width: '100%'}}
             value={this.state.age}/>
           <h4>Sex</h4>
           <RadioButtonGroup name="sex" onChange={this._handleSexChange}>
@@ -91,7 +94,7 @@ export default class extends React.Component {
             menuItems={menuItems}
             onChange={this._handleActivityLevelChange}/>
           <h4>Your Total Energy Expenditure: {this._getResult()}</h4>
-        </Paper>
+        </div>
       </div>
     );
   }
