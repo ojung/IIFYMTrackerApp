@@ -1,9 +1,32 @@
 import _ from 'lodash';
 import React from 'react';
-import {AppBar, DropDownMenu, Paper, TextField, RadioButtonGroup, RadioButton} from 'material-ui';
+import {
+  AppBar,
+  DropDownMenu,
+  Paper,
+  RadioButton,
+  RadioButtonGroup,
+  TextField,
+} from 'material-ui';
+
+import immutableSetState from '../../common/immutableSetState';
 
 export default class extends React.Component {
-  state = {}
+  static propTypes = {
+    initialWeight: React.PropTypes.number,
+    initialHeight: React.PropTypes.number,
+    initialAge: React.PropTypes.number,
+    initialSex: React.PropTypes.string,
+    initialPyhsicalActivityFactor: React.PropTypes.number,
+  }
+
+  state = {
+    weight: this.props.intialWeight,
+    height: this.props.intialHeight,
+    age: this.props.intialAge,
+    sex: this.props.intialSex,
+    physicalActivityFactor: this.props.intialPhysicalActivityFactor,
+  }
 
   _handleTextFieldChange = (field, event) => {
     const newState = _.extend({}, this.state);
