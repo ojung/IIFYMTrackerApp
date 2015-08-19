@@ -7,10 +7,26 @@ import FilterableSearchResults from './FilterableSearchResults';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
 
-export default class extends React.Component {
-  static propTypes = {
-    searchResults: React.PropTypes.instanceOf(Immutable.List).isRequired,
-  }
+const SEARCHRESULTS = Immutable.fromJS([
+  {name: 'Potatoes'},
+  {name: 'Chicken Breast'},
+  {name: 'Brussel Sprouts'},
+  {name: 'Beef'},
+  {name: 'Doener Kebab'},
+  {name: 'Falafel'},
+  {name: 'Schawarma'},
+  {name: 'Kumpir'},
+  {name: 'Burger'},
+  {name: 'Nudelz'},
+  {name: 'Capsicum'},
+  {name: 'Zuckerpo'},
+  {name: 'Cadbury'},
+  {name: 'Malteser'},
+  {name: 'Pizza'},
+], (key, value) => {
+  const isIndexed = Immutable.Iterable.isIndexed(value);
+  return isIndexed ? value.toList() : value.toOrderedMap();
+});
 
   constructor(props) {
     super(props);
@@ -35,7 +51,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const filteredResults = this.props.searchResults
+    const filteredResults = SEARCHRESULTS
       .filter(isNotSelected.bind(null, this.state.selectedItems))
       .filter(matchesSearchText.bind(null, this.state.searchText));
 
