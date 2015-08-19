@@ -9,6 +9,13 @@ import {
 
 import immutableSetState from '../../common/immutableSetState';
 
+const menuItems = [
+  {payload: 1.15, text: 'Extremly Inactive'},
+  {payload: 1.3, text: 'Sedentary'},
+  {payload: 1.6, text: 'Moderatly Active'},
+  {payload: 2.05, text: 'Vigorously Active'},
+];
+
 export default class extends React.Component {
   static propTypes = {
     initialWeight: React.PropTypes.number,
@@ -93,10 +100,3 @@ export default class extends React.Component {
     );
   }
 }
-
-const menuItems = [
-  {payload: 1.15, text: 'Extremly Inactive'},
-  {payload: 1.3, text: 'Sedentary'},
-  {payload: 1.6, text: 'Moderatly Active'},
-  {payload: 2.05, text: 'Vigorously Active'},
-];
