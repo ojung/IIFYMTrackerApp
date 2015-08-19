@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import React from 'react';
 import {List, ListItem, Paper} from 'material-ui';
 
-import Remove from './svg-icons/Remove';
+import Remove from '../svg-icons/Remove';
 
 export default class extends React.Component {
   static propTypes = {
