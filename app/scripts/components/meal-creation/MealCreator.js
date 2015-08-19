@@ -6,6 +6,7 @@ import {AppBar, FlatButton} from 'material-ui';
 import FilterableSearchResults from './FilterableSearchResults';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
+import immutableSetState from '../../common/immutableSetState';
 
 const SEARCHRESULTS = Immutable.fromJS([
   {name: 'Potatoes'},
@@ -28,26 +29,24 @@ const SEARCHRESULTS = Immutable.fromJS([
   return isIndexed ? value.toList() : value.toOrderedMap();
 });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: '',
-      selectedItems: new Immutable.Set(),
-    };
+export default class extends React.Component {
+  state = {
+    searchText: '',
+    selectedItems: new Immutable.Set(),
   }
 
   _handleUserInput(searchText) {
-    this.setState(_.extend({}, this.state, {searchText}));
+    immutableSetState(this, {searchText});
   }
 
   _removeItem(item) {
     const selectedItems = this.state.selectedItems.subtract([item]);
-    this.setState(_.extend({}, this.state, {selectedItems}));
+    immutableSetState(this, {selectedItems});
   }
 
   _addItem(item) {
     const selectedItems = this.state.selectedItems.add(item);
-    this.setState(_.extend({}, this.state, {selectedItems}));
+    immutableSetState(this, {selectedItems});
   }
 
   render() {
