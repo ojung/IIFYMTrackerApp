@@ -13,6 +13,8 @@ window.React = React;
 injectTapEventPlugin();
 
 class App extends React.Component {
+  static childContextTypes = {muiTheme: React.PropTypes.object}
+
   getChildContext() {
     return {
       muiTheme: ThemeManager.getCurrentTheme()
@@ -23,10 +25,6 @@ class App extends React.Component {
     return <RouteHandler/>;
   }
 }
-
-App.childContextTypes = {
-  muiTheme: React.PropTypes.object
-};
 
 const routes = (
   <Route handler={App}>
