@@ -9,8 +9,6 @@ import TeeCalculator from './components/tee-calculation/TeeCalculator';
 
 const ThemeManager = new mui.Styles.ThemeManager();
 
-window.React = React;
-
 injectTapEventPlugin();
 
 class App extends React.Component {
