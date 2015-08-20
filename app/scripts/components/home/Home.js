@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import EnergyChart from './EnergyChart';
 import EnergyOverview from './EnergyOverview';
-import Chart from '../svg-icons/Chart';
+import {Chart} from '../svg-icons/SvgIcons';
 
 moment.locale('nz', {
   calendar: {

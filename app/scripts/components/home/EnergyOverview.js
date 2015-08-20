@@ -5,9 +5,7 @@ import {
   ListItem,
 } from 'material-ui';
 
-import Pizza from '../svg-icons/Pizza';
-import Run from '../svg-icons/Run';
-import Sum from '../svg-icons/Sum';
+import {Pizza, Run, Sum} from '../svg-icons/SvgIcons';
 
 export default class extends React.Component {
   static propTypes = {
