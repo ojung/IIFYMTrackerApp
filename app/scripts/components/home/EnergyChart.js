@@ -7,15 +7,13 @@ export default class extends React.Component {
     data: React.PropTypes.instanceOf(Immutable.List).isRequired
   }
 
-  _getOptions = () => {
-    return {
-      bezierCurve: true,
-      bezierCurveTension: 0.3,
-      pointDotRadius: 3,
-      pointDotStrokeWidth: 1,
-      pointHitDetectionRadius: 4,
-      datasetFill: true,
-    };
+  options = {
+    bezierCurve: true,
+    bezierCurveTension: 0.3,
+    pointDotRadius: 3,
+    pointDotStrokeWidth: 1,
+    pointHitDetectionRadius: 4,
+    datasetFill: true,
   }
 
   _getData = () => {
@@ -42,7 +40,7 @@ export default class extends React.Component {
     return (
       <Line
         data={this._getData()}
-        options={this._getOptions()}
+        options={this.options}
         style={{width: '100%'}}/>
     );
   }

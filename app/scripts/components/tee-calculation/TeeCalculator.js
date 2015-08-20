@@ -54,7 +54,6 @@ export default class extends React.Component {
 
   _getResult = () => {
     const data = this.state.data.toObject();
-
     if (!_(data).values().all(Boolean)) {
       return '';
     }
