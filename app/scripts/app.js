@@ -3,6 +3,7 @@ import Router, {Route, RouteHandler} from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import mui from 'material-ui';
 
+import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
@@ -12,7 +13,9 @@ const ThemeManager = new mui.Styles.ThemeManager();
 injectTapEventPlugin();
 
 class App extends React.Component {
-  static childContextTypes = {muiTheme: React.PropTypes.object}
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object
+  }
 
   getChildContext() {
     return {
@@ -34,6 +37,7 @@ const routes = (
   <Route handler={App}>
     <Route path="meal-creator" handler={MealCreator}/>
     <Route path="tee-calculator" handler={TeeCalculator}/>
+    <Route path="home" handler={Home}/>
   </Route>
 );
 
