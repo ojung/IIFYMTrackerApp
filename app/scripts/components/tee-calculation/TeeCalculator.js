@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Immutable from 'immutable';
 import React from 'react';
 import {
   DropDownMenu,
@@ -26,33 +27,39 @@ export default class extends React.Component {
   }
 
   state = {
-    weight: this.props.intialWeight,
-    height: this.props.intialHeight,
-    age: this.props.intialAge,
-    sex: this.props.intialSex,
-    physicalActivityFactor: this.props.intialPhysicalActivityFactor,
+    data: Immutable.Map({
+      weight: this.props.intialWeight,
+      height: this.props.intialHeight,
+      age: this.props.intialAge,
+      sex: this.props.intialSex,
+      physicalActivityFactor: this.props.intialPhysicalActivityFactor,
+    })
   }
 
-  _handleTextFieldChange = (field, event) => {
-    const newState = _.extend({}, this.state);
-    newState[field] = event.target.value;
-    this.setState(newState);
+  _handleTextFieldChange(field, event) {
+    const newValue = event.target.value;
+    immutableSetState(this, (data) => data.set(field, newValue));
   }
 
   _handleActivityLevelChange = (_event, _selectedIndex, menuItem) => {
-    immutableSetState(this, {physicalActivityFactor: menuItem.payload});
+    const physicalActivityFactor = menuItem.payload;
+    immutableSetState(this, (data) => {
+      return data.set('physicalActivityFactor', physicalActivityFactor);
+    });
   }
 
   _handleSexChange = (_event, selectedItem) => {
-    immutableSetState(this, {sex: selectedItem});
+    immutableSetState(this, (data) => data.set('sex', selectedItem));
   }
 
   _getResult = () => {
-    if (!_(this.state).values().all(Boolean)) {
+    const data = this.state.data.toObject();
+
+    if (!_(data).values().all(Boolean)) {
       return '';
     }
 
-    const {weight, height, age, sex, physicalActivityFactor} = this.state;
+    const {weight, height, age, sex, physicalActivityFactor} = data;
     const sexParameter = {female: -161, male: 5}[sex];
     const restingEnergyExpenditure =
       (10 * weight + 6.25 * height - 5 * age + sexParameter);
@@ -68,23 +75,26 @@ export default class extends React.Component {
             type='number'
             floatingLabelText='Weight'
             hintText='Enter your Weight in kg'
+            ref="weight"
             onChange={this._handleTextFieldChange.bind(this, 'weight')}
             style={{width: '100%'}}
-            value={this.state.weight}/>
+            value={this.state.data.get('weight')}/>
           <TextField
             type='number'
             floatingLabelText='Height'
             hintText='Enter your Height in cm'
+            ref="height"
             onChange={this._handleTextFieldChange.bind(this, 'height')}
             style={{width: '100%'}}
-            value={this.state.height}/>
+            value={this.state.data.get('height')}/>
           <TextField
             type='number'
             floatingLabelText='Age'
             hintText='Enter your Age in Years'
+            ref="age"
             onChange={this._handleTextFieldChange.bind(this, 'age')}
             style={{width: '100%'}}
-            value={this.state.age}/>
+            value={this.state.data.get('age')}/>
           <h4>Sex</h4>
           <RadioButtonGroup name="sex" onChange={this._handleSexChange}>
             <RadioButton value="male" label="Male"/>

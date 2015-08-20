@@ -29,40 +29,44 @@ const SEARCHRESULTS = Immutable.fromJS([
 
 export default class extends React.Component {
   state = {
-    searchText: '',
-    selectedItems: new Immutable.Set(),
+    data: Immutable.Map({
+      searchText: '',
+      selectedItems: new Immutable.Set(),
+    })
   }
 
-  _handleUserInput(searchText) {
-    immutableSetState(this, {searchText});
+  _handleUserInput = (searchText) => {
+    immutableSetState(this, (data) => data.set('searchText', searchText));
   }
 
-  _removeItem(item) {
-    const selectedItems = this.state.selectedItems.subtract([item]);
-    immutableSetState(this, {selectedItems});
+  _removeItem = (item) => {
+    const selectedItems = this.state.data.get('selectedItems').subtract([item]);
+    immutableSetState(this, (data) => data.set('selectedItems', selectedItems));
   }
 
-  _addItem(item) {
-    const selectedItems = this.state.selectedItems.add(item);
-    immutableSetState(this, {selectedItems, searchText: ''});
+  _addItem = (item) => {
+    const selectedItems = this.state.data.get('selectedItems').add(item);
+    immutableSetState(this, (data) => {
+      return data.set('selectedItems', selectedItems).set('searchText', '');
+    });
   }
 
   render() {
     const filteredResults = SEARCHRESULTS
-      .filter(isNotSelected.bind(null, this.state.selectedItems))
-      .filter(matchesSearchText.bind(null, this.state.searchText));
+      .filter(isNotSelected.bind(null, this.state.data.get('selectedItems')))
+      .filter(matchesSearchText.bind(null, this.state.data.get('searchText')));
 
     return (
       <div>
         <MealSearchForm
-          searchText={this.state.searchText}
-          onUserInput={this._handleUserInput.bind(this)}/>
+          searchText={this.state.data.get('searchText')}
+          onUserInput={this._handleUserInput}/>
         <SelectedItems
-          items={this.state.selectedItems}
-          onClick={this._removeItem.bind(this)}/>
+          items={this.state.data.get('selectedItems')}
+          onClick={this._removeItem}/>
         <FilterableSearchResults
           items={filteredResults}
-          onClick={this._addItem.bind(this)}/>
+          onClick={this._addItem}/>
       </div>
     );
   }

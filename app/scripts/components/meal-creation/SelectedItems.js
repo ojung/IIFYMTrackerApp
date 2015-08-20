@@ -17,7 +17,8 @@ export default class extends React.Component {
   render() {
     return (
       <Paper zDepth={1}>
-        <List subheader="Selected Items">
+        <List subheader="Selected Items"
+          style={{marginBottom: '10px'}}>
           {this.props.items.map((item) => {
             const name = item.get('name');
             return (
