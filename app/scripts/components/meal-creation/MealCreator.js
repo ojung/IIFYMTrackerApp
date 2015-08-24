@@ -1,10 +1,15 @@
 import Immutable from 'immutable';
 import React from 'react';
+import {connect} from 'react-redux';
 
 import FilterableSearchResults from './FilterableSearchResults';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
-import immutableSetState from '../../common/immutableSetState';
+import {
+  updateSearchText,
+  addItem,
+  removeItem,
+} from '../../actions/meal-creation';
 
 const SEARCHRESULTS = Immutable.fromJS([
   {name: 'Potatoes'},
@@ -27,46 +32,33 @@ const SEARCHRESULTS = Immutable.fromJS([
   return isIndexed ? value.toList() : value.toOrderedMap();
 });
 
-export default class extends React.Component {
-  state = {
-    data: Immutable.Map({
-      searchText: '',
-      selectedItems: new Immutable.Set(),
-    })
-  }
-
-  _handleUserInput = (searchText) => {
-    immutableSetState(this, (data) => data.set('searchText', searchText));
-  }
-
-  _removeItem = (item) => {
-    const selectedItems = this.state.data.get('selectedItems').subtract([item]);
-    immutableSetState(this, (data) => data.set('selectedItems', selectedItems));
-  }
-
-  _addItem = (item) => {
-    const selectedItems = this.state.data.get('selectedItems').add(item);
-    immutableSetState(this, (data) => {
-      return data.set('selectedItems', selectedItems).set('searchText', '');
-    });
+class MealCreator extends React.Component {
+  static propTypes = {
+    searchText: React.PropTypes.string,
+    selectedItems: React.PropTypes.instanceOf(Immutable.Set),
   }
 
   render() {
+    const {dispatch, selectedItems, searchText} = this.props;
+
     const filteredResults = SEARCHRESULTS
-      .filter(isNotSelected.bind(null, this.state.data.get('selectedItems')))
-      .filter(matchesSearchText.bind(null, this.state.data.get('searchText')));
+      .filter(isNotSelected.bind(null, selectedItems))
+      .filter(matchesSearchText.bind(null, searchText));
 
     return (
       <div>
         <MealSearchForm
-          searchText={this.state.data.get('searchText')}
-          onUserInput={this._handleUserInput}/>
+          searchText={searchText}
+          onUserInput={(text) => dispatch(updateSearchText(text))}/>
         <SelectedItems
-          items={this.state.data.get('selectedItems')}
-          onClick={this._removeItem}/>
+          items={selectedItems}
+          onClick={(item) => dispatch(removeItem(item))}/>
         <FilterableSearchResults
           items={filteredResults}
-          onClick={this._addItem}/>
+          onClick={(item) => {
+            dispatch(addItem(item));
+            dispatch(updateSearchText(''));
+          }}/>
       </div>
     );
   }
@@ -81,3 +73,13 @@ function isNotSelected(selectedItems, result) {
   const name = result.get('name');
   return !selectedItems.find((item) => item.get('name') === name);
 }
+
+function select(state) {
+  const ui = state.get('ui');
+  return {
+    selectedItems: ui.get('selectedItems'),
+    searchText: ui.get('searchText'),
+  };
+}
+
+export default connect(select)(MealCreator);

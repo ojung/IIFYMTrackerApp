@@ -1,5 +1,7 @@
 import React from 'react';
 import Router, {Route, RouteHandler} from 'react-router';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import mui from 'material-ui';
 
@@ -7,10 +9,13 @@ import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
+import {mealCreation} from './reducers/meal-creation';
 
 const ThemeManager = new mui.Styles.ThemeManager();
 
 injectTapEventPlugin();
+
+const store = createStore(mealCreation);
 
 class App extends React.Component {
   static childContextTypes = {
@@ -27,7 +32,9 @@ class App extends React.Component {
     return (
       <div>
         <Menu/>
-        <RouteHandler/>
+        <Provider store={store}>
+          {() => <RouteHandler/>}
+        </Provider>
       </div>
     );
   }
