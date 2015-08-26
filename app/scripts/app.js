@@ -9,13 +9,13 @@ import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
-import {mealCreation} from './reducers/meal-creation';
+import rootReducer from './reducers/root-reducer';
 
 const ThemeManager = new mui.Styles.ThemeManager();
 
 injectTapEventPlugin();
 
-const store = createStore(mealCreation);
+const store = createStore(rootReducer);
 
 class App extends React.Component {
   static childContextTypes = {

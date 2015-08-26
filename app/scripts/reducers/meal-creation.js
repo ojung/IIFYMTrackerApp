@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import {combineReducers} from 'redux';
 
 import {
   ADD_ITEM,
@@ -7,16 +6,15 @@ import {
   UPDATE_SEARCHTEXT
 } from '../actions/meal-creation';
 
-function searchText(state = '', action) {
-  const {type, text} = action;
-  if (type === UPDATE_SEARCHTEXT) {
-    return text;
+export function searchText(state = '', action) {
+  if (action.type === UPDATE_SEARCHTEXT) {
+    return action.text;
   }
   return state;
 }
 
 const initialSelectedItems = Immutable.Set();
-function selectedItems(state = initialSelectedItems, action) {
+export function selectedItems(state = initialSelectedItems, action) {
   const {type, item} = action;
   if (type === ADD_ITEM) {
     return state.add(item);
@@ -26,5 +24,3 @@ function selectedItems(state = initialSelectedItems, action) {
   }
   return state;
 }
-
-export const mealCreation = combineReducers({searchText, selectedItems});
