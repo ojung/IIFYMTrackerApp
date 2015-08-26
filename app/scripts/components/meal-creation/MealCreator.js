@@ -42,8 +42,8 @@ class MealCreator extends React.Component {
     const {dispatch, selectedItems, searchText} = this.props;
 
     const filteredResults = SEARCHRESULTS
-      .filter(isNotSelected.bind(null, selectedItems))
-      .filter(matchesSearchText.bind(null, searchText));
+      .filter(isNotSelected(selectedItems))
+      .filter(matchesSearchText(searchText));
 
     return (
       <div>
@@ -64,12 +64,12 @@ class MealCreator extends React.Component {
   }
 }
 
-function matchesSearchText(searchText, result) {
+const matchesSearchText = searchText => result => {
   const regexp = new RegExp(searchText, 'i');
   return searchText === '' || result.get('name').match(regexp);
 }
 
-function isNotSelected(selectedItems, result) {
+const isNotSelected = selectedItems => result => {
   const name = result.get('name');
   return !selectedItems.find((item) => item.get('name') === name);
 }
