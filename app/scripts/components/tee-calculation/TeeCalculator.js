@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import Immutable from 'immutable';
 import React from 'react';
+import {connect} from 'react-redux';
 import {
   DropDownMenu,
   RadioButton,
@@ -8,7 +8,13 @@ import {
   TextField,
 } from 'material-ui';
 
-import immutableSetState from '../../common/immutableSetState';
+import {
+  updateHeight,
+  updateWeight,
+  updateSex,
+  updateAge,
+  updatePhysicalActivityFactor,
+} from '../../actions/tee-calculation';
 
 const menuItems = [
   {payload: 1.15, text: 'Extremly Inactive'},
@@ -17,43 +23,19 @@ const menuItems = [
   {payload: 2.05, text: 'Vigorously Active'},
 ];
 
-export default class extends React.Component {
+//TODO: Save selected item for sex and paf
+class TeeCalculator extends React.Component {
   static propTypes = {
-    initialWeight: React.PropTypes.number,
-    initialHeight: React.PropTypes.number,
-    initialAge: React.PropTypes.number,
-    initialSex: React.PropTypes.string,
-    initialPyhsicalActivityFactor: React.PropTypes.number,
-  }
-
-  state = {
-    data: Immutable.Map({
-      weight: this.props.intialWeight,
-      height: this.props.intialHeight,
-      age: this.props.intialAge,
-      sex: this.props.intialSex,
-      physicalActivityFactor: this.props.intialPhysicalActivityFactor,
-    })
-  }
-
-  _handleTextFieldChange(field, event) {
-    const newValue = event.target.value;
-    immutableSetState(this, (data) => data.set(field, newValue));
-  }
-
-  _handleActivityLevelChange = (_event, _selectedIndex, menuItem) => {
-    const physicalActivityFactor = menuItem.payload;
-    immutableSetState(this, (data) => {
-      return data.set('physicalActivityFactor', physicalActivityFactor);
-    });
-  }
-
-  _handleSexChange = (_event, selectedItem) => {
-    immutableSetState(this, (data) => data.set('sex', selectedItem));
+    dispatch: React.PropTypes.func,
+    weight: React.PropTypes.number,
+    height: React.PropTypes.number,
+    age: React.PropTypes.number,
+    sex: React.PropTypes.string,
+    pyhsicalActivityFactor: React.PropTypes.number,
   }
 
   _getResult = () => {
-    const data = this.state.data.toObject();
+    const data = this.props;
     if (!_(data).values().all(Boolean)) {
       return '';
     }
@@ -67,6 +49,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const {dispatch, age, weight, height} = this.props;
     return (
       <div>
         <div style={{padding: '15px'}}>
@@ -74,38 +57,51 @@ export default class extends React.Component {
             type='number'
             floatingLabelText='Weight'
             hintText='Enter your Weight in kg'
-            ref="weight"
-            onChange={this._handleTextFieldChange.bind(this, 'weight')}
+            onChange={(event) => dispatch(updateWeight(event.target.value))}
             style={{width: '100%'}}
-            value={this.state.data.get('weight')}/>
+            value={weight}/>
           <TextField
             type='number'
             floatingLabelText='Height'
             hintText='Enter your Height in cm'
-            ref="height"
-            onChange={this._handleTextFieldChange.bind(this, 'height')}
+            onChange={(event) => dispatch(updateHeight(event.target.value))}
             style={{width: '100%'}}
-            value={this.state.data.get('height')}/>
+            value={height}/>
           <TextField
             type='number'
             floatingLabelText='Age'
             hintText='Enter your Age in Years'
-            ref="age"
-            onChange={this._handleTextFieldChange.bind(this, 'age')}
+            onChange={(event) => dispatch(updateAge(event.target.value))}
             style={{width: '100%'}}
-            value={this.state.data.get('age')}/>
+            value={age}/>
           <h4>Sex</h4>
-          <RadioButtonGroup name="sex" onChange={this._handleSexChange}>
+          <RadioButtonGroup
+            name="sex"
+            onChange={(_e, item) => dispatch(updateSex(item))}>
             <RadioButton value="male" label="Male"/>
             <RadioButton value="female" label="Female"/>
           </RadioButtonGroup>
           <h4>Activity Level</h4>
           <DropDownMenu
             menuItems={menuItems}
-            onChange={this._handleActivityLevelChange}/>
+            onChange={(_e, _b, item) =>
+              dispatch(updatePhysicalActivityFactor(item.payload))}/>
           <h4>Your Total Energy Expenditure: {this._getResult()}</h4>
         </div>
       </div>
     );
   }
 }
+
+function select(state) {
+  const ui = state.get('ui');
+  return {
+    age: ui.get('age'),
+    height: ui.get('height'),
+    physicalActivityFactor: ui.get('physicalActivityFactor'),
+    sex: ui.get('sex'),
+    weight: ui.get('weight'),
+  };
+}
+
+export default connect(select)(TeeCalculator);
