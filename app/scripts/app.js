@@ -36,15 +36,23 @@ class App extends React.Component {
   }
 
   render() {
+    const containerStyle = {
+      maxWidth: 800,
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    };
     return (
       <div>
         <Menu/>
-        <Provider store={store}>
-          {() => <RouteHandler/>}
-        </Provider>
+        <div style={containerStyle}>
+          <Provider store={store}>
+            {() => <RouteHandler/>}
+          </Provider>
+        </div>
         {
           <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor}/>
+            <DevTools store={store} monitor={LogMonitor}/>
           </DebugPanel>
         }
       </div>
