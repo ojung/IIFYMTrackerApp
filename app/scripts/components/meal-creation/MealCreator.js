@@ -74,12 +74,12 @@ class MealCreator extends React.Component {
 const matchesSearchText = searchText => result => {
   const regexp = new RegExp(searchText, 'i');
   return searchText === '' || result.get('name').match(regexp);
-}
+};
 
 const isNotSelected = selectedItems => result => {
   const name = result.get('name');
   return !selectedItems.find((item) => item.get('name') === name);
-}
+};
 
 function select(state) {
   const ui = state.get('ui');
