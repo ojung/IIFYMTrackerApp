@@ -1,9 +1,9 @@
 import Immutable from 'immutable';
 import React from 'react';
 import {connect} from 'react-redux';
-import {FloatingActionButton} from 'material-ui';
 
 import FilterableSearchResults from './FilterableSearchResults';
+import FloatingActionButton from '../FloatingActionButton';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
 import {
@@ -12,7 +12,6 @@ import {
   storeConsumptionEvent,
   updateSearchText,
 } from '../../actions/meal-creation';
-import {Tick} from '../svg-icons/svgicons';
 
 const SEARCHRESULTS = Immutable.fromJS([
   {name: 'Potatoes'},
@@ -51,9 +50,7 @@ class MealCreator extends React.Component {
     return (
       <div>
         <FloatingActionButton onClick={() =>
-          dispatch(storeConsumptionEvent(selectedItems))}>
-          <Tick/>
-        </FloatingActionButton>
+            dispatch(storeConsumptionEvent(selectedItems))}/>
         <MealSearchForm
           searchText={searchText}
           onUserInput={(text) => dispatch(updateSearchText(text))}/>
