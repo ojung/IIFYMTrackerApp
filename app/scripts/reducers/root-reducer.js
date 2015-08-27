@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import {searchText, selectedItems} from './meal-creation';
+import {searchText, selectedItems, consumptionEvents} from './meal-creation';
 import {
   age,
   height,
@@ -10,8 +10,8 @@ import {
 } from './tee-calculation';
 
 const initialState = Immutable.Map({
-  ui: Immutable.Map({}),
-  data: Immutable.Map({}),
+  ui: Immutable.Map(),
+  data: Immutable.Map(),
 });
 
 export default function(state = initialState, action) {
@@ -34,6 +34,9 @@ function ui(state, action) {
   });
 }
 
-function data(state/*, action*/) {
-  return state;
+function data(state, action) {
+  return Immutable.Map({
+    consumptionEvents:
+      consumptionEvents(state.get('consumptionEvents'), action),
+  });
 }
