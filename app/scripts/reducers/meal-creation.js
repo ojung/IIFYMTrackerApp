@@ -1,8 +1,10 @@
 import Immutable from 'immutable';
+import moment from 'moment';
 
 import {
   ADD_ITEM,
   REMOVE_ITEM,
+  STORE_CONSUMPTION_EVENT,
   UPDATE_SEARCHTEXT
 } from '../actions/meal-creation';
 
@@ -23,4 +25,22 @@ export function selectedItems(state = initialSelectedItems, action) {
     return state.remove(item);
   }
   return state;
+}
+
+const initialConsumptionEvents = Immutable.List();
+export function consumptionEvents(state = initialConsumptionEvents, action) {
+  const {type, foodItems} = action;
+  if (type === STORE_CONSUMPTION_EVENT) {
+    return state.push(consumptionEvent(foodItems));
+  }
+  return state;
+}
+
+function consumptionEvent(foodItems) {
+  const totalEnergy = foodItems.reduce((item, acc) => acc + item.energyValue);
+  return Immutable.Map({
+    consumedItems: foodItems,
+    totalEnergy,
+    dateTime: moment(),
+  });
 }

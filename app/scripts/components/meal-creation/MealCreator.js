@@ -3,12 +3,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import FilterableSearchResults from './FilterableSearchResults';
+import FloatingActionButton from '../FloatingActionButton';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
 import {
-  updateSearchText,
   addItem,
   removeItem,
+  storeConsumptionEvent,
+  updateSearchText,
 } from '../../actions/meal-creation';
 
 const SEARCHRESULTS = Immutable.fromJS([
@@ -47,6 +49,8 @@ class MealCreator extends React.Component {
 
     return (
       <div>
+        <FloatingActionButton onClick={() =>
+            dispatch(storeConsumptionEvent(selectedItems))}/>
         <MealSearchForm
           searchText={searchText}
           onUserInput={(text) => dispatch(updateSearchText(text))}/>
@@ -67,12 +71,12 @@ class MealCreator extends React.Component {
 const matchesSearchText = searchText => result => {
   const regexp = new RegExp(searchText, 'i');
   return searchText === '' || result.get('name').match(regexp);
-}
+};
 
 const isNotSelected = selectedItems => result => {
   const name = result.get('name');
   return !selectedItems.find((item) => item.get('name') === name);
-}
+};
 
 function select(state) {
   const ui = state.get('ui');
