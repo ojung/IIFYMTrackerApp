@@ -3,9 +3,11 @@ import moment from 'moment';
 
 import {
   ADD_ITEM,
+  RECEIVE_SEARCH_RESULTS,
   REMOVE_ITEM,
+  SEARCH_FOOD,
   STORE_CONSUMPTION_EVENT,
-  UPDATE_SEARCHTEXT
+  UPDATE_SEARCHTEXT,
 } from '../actions/meal-creation';
 
 export function searchText(state = '', action) {
@@ -15,8 +17,7 @@ export function searchText(state = '', action) {
   return state;
 }
 
-const initialSelectedItems = Immutable.Set();
-export function selectedItems(state = initialSelectedItems, action) {
+export function selectedItems(state = Immutable.Set(), action) {
   const {type, item} = action;
   if (type === ADD_ITEM) {
     return state.add(item);
@@ -27,8 +28,7 @@ export function selectedItems(state = initialSelectedItems, action) {
   return state;
 }
 
-const initialConsumptionEvents = Immutable.List();
-export function consumptionEvents(state = initialConsumptionEvents, action) {
+export function consumptionEvents(state = Immutable.List(), action) {
   const {type, foodItems} = action;
   if (type === STORE_CONSUMPTION_EVENT) {
     return state.push(consumptionEvent(foodItems));
@@ -44,3 +44,22 @@ function consumptionEvent(foodItems) {
     dateTime: moment(),
   });
 }
+
+export function searchResults(state = Immutable.Map(), action) {
+  if (action.type === RECEIVE_SEARCH_RESULTS) {
+    return getOrUpdate(state, action.searchText, action.searchResults);
+  }
+  return state;
+}
+
+function getOrUpdate(map, key, value) {
+  if (value.size === 0) {
+    return map;
+  }
+  if (!map.has(key)) {
+    return map.set(key, Immutable.Set(value));
+  }
+  const oldSet = map.get(key);
+  return map.set(key, oldSet.union(value));
+}
+

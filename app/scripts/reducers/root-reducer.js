@@ -1,6 +1,11 @@
 import Immutable from 'immutable';
 
-import {searchText, selectedItems, consumptionEvents} from './meal-creation';
+import {
+  consumptionEvents,
+  searchResults,
+  searchText,
+  selectedItems,
+} from './meal-creation';
 import {
   age,
   height,
@@ -38,5 +43,6 @@ function data(state, action) {
   return Immutable.Map({
     consumptionEvents:
       consumptionEvents(state.get('consumptionEvents'), action),
+    searchResults: searchResults(state.get('searchResults'), action),
   });
 }

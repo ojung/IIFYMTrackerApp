@@ -3,6 +3,6 @@ const promise = store => next => action => {
     return next(action);
   }
   return action.then(store.dispatch);
-}
+};
 export default promise;
 

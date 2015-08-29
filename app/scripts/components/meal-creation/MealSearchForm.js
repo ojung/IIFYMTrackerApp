@@ -1,10 +1,10 @@
-import Immutable from 'immutable';
 import React from 'react';
 import {TextField} from 'material-ui';
 
 export default class extends React.Component {
   static propTypes = {
-    items: React.PropTypes.instanceOf(Immutable.List)
+    onUserInput: React.PropTypes.func,
+    searchText: React.PropTypes.string,
   }
 
   _handleChange(event) {
