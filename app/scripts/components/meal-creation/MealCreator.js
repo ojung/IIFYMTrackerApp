@@ -18,22 +18,28 @@ import {
 class MealCreator extends React.Component {
   static propTypes = {
     searchText: React.PropTypes.string,
-    selectedItems: React.PropTypes.instanceOf(Immutable.Set),
-    searchResults: React.PropTypes.instanceOf(Immutable.Set),
+    isCached: React.PropTypes.bool.isRequired,
+    selectedItems: React.PropTypes.instanceOf(Immutable.Set).isRequired,
+    searchResults: React.PropTypes.instanceOf(Immutable.Set).isRequired,
+  }
+
+  componentDidUpdate() {
+    const {dispatch, isCached, searchText} = this.props;
+
+    if (searchText.length <= 3 || isCached) {
+      return;
+    }
+
+    dispatch(searchFood(searchText));
   }
 
   render() {
     const {
       dispatch,
-      searchIsCached,
       searchResults,
       searchText,
       selectedItems,
     } = this.props;
-
-    if (searchText.length >= 3 && !searchIsCached) {
-      dispatch(searchFood(searchText));
-    }
 
     return (
       <div>

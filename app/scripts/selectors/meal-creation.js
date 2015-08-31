@@ -1,5 +1,7 @@
 import Immutable from 'immutable';
-import {createSelector, createSelectorCreator} from 'reselect';
+import {createSelectorCreator} from 'reselect';
+
+const immutableCreateSelector = createSelectorCreator(Immutable.is);
 
 const searchTextSelector = state => state.get('ui').get('searchText');
 
@@ -7,12 +9,14 @@ const selectedItemsSelector = state => state.get('ui').get('selectedItems');
 
 const searchResultsSelector = state => state.get('data').get('searchResults');
 
-const immutableCreateSelector = createSelectorCreator(Immutable.is);
+const isFetchingSelector = state => state.get('ui').get('isFetching');
 
 const searchResultSetSelector = immutableCreateSelector(
   searchResultsSelector,
-  (searchResults) => searchResults
-    .reduce((results, result) => results.union(result), Immutable.Set())
+  (searchResults) => {
+    return searchResults
+      .reduce((results, result) => results.union(result), Immutable.Set());
+  }
 );
 
 const selectedSearchResultsSelector = immutableCreateSelector(
@@ -46,12 +50,19 @@ const filteredSearchResultsSelector = immutableCreateSelector([
     .take(50);
 });
 
+const isCachedSelector = immutableCreateSelector(
+  [searchTextSelector, searchResultsSelector],
+  (searchText, searchResults) => searchResults.has(searchText)
+);
+
 const mealCreationSelector = immutableCreateSelector([
   searchTextSelector,
   selectedItemsSelector,
   filteredSearchResultsSelector,
-], (searchText, selectedItems, searchResults) => {
-  return {searchResults, searchText, selectedItems};
+  isCachedSelector,
+  isFetchingSelector,
+], (searchText, selectedItems, searchResults, isCached, isFetching) => {
+  return {searchResults, searchText, selectedItems, isCached, isFetching};
 });
 
 export default mealCreationSelector;

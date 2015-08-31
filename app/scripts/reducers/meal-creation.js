@@ -5,7 +5,7 @@ import {
   ADD_ITEM,
   RECEIVE_SEARCH_RESULTS,
   REMOVE_ITEM,
-  SEARCH_FOOD,
+  SET_IS_FETCHING,
   STORE_CONSUMPTION_EVENT,
   UPDATE_SEARCHTEXT,
 } from '../actions/meal-creation';
@@ -53,9 +53,6 @@ export function searchResults(state = Immutable.Map(), action) {
 }
 
 function getOrUpdate(map, key, value) {
-  if (value.size === 0) {
-    return map;
-  }
   if (!map.has(key)) {
     return map.set(key, Immutable.Set(value));
   }
@@ -63,3 +60,9 @@ function getOrUpdate(map, key, value) {
   return map.set(key, oldSet.union(value));
 }
 
+export function isFetching(state = false, action) {
+  if (action.type === SET_IS_FETCHING) {
+    return action.isFetching;
+  }
+  return state;
+}

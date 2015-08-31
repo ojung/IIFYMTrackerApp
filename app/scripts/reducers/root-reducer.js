@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 
 import {
   consumptionEvents,
+  isFetching,
   searchResults,
   searchText,
   selectedItems,
@@ -30,6 +31,7 @@ function ui(state, action) {
   return Immutable.Map({
     age: age(state.get('age'), action),
     height: height(state.get('height'), action),
+    isFetching: isFetching(state.get('isFetching'), action),
     physicalActivityFactor:
       physicalActivityFactor(state.get('physicalActivityFactor'), action),
     searchText: searchText(state.get('searchText'), action),

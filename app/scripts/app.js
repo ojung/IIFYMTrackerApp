@@ -13,6 +13,7 @@ import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
 import promise from './middlewares/promise';
 import rootReducer from './reducers/root-reducer';
+import thunk from './middlewares/thunk';
 
 const ThemeManager = new mui.Styles.ThemeManager();
 injectTapEventPlugin();
@@ -22,7 +23,8 @@ const decoratedCreateStore = compose(
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
   createStore,
 );
-const store = applyMiddleware(promise)(decoratedCreateStore)(rootReducer);
+const store =
+  applyMiddleware(promise, thunk)(decoratedCreateStore)(rootReducer);
 
 class App extends React.Component {
   static childContextTypes = {
