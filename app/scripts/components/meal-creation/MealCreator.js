@@ -6,6 +6,7 @@ import FilterableSearchResults from './FilterableSearchResults';
 import FloatingActionButton from '../FloatingActionButton';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
+import mealCreationSelector from '../../selectors/meal-creation';
 import {
   addItem,
   removeItem,
@@ -18,7 +19,7 @@ class MealCreator extends React.Component {
   static propTypes = {
     searchText: React.PropTypes.string,
     selectedItems: React.PropTypes.instanceOf(Immutable.Set),
-    searchResults: React.PropTypes.instanceOf(Immutable.List),
+    searchResults: React.PropTypes.instanceOf(Immutable.Set),
   }
 
   render() {
@@ -55,35 +56,4 @@ class MealCreator extends React.Component {
   }
 }
 
-function select(state) {
-  const ui = state.get('ui');
-  const data = state.get('data');
-  const searchText = ui.get('searchText');
-  const selectedItems = ui.get('selectedItems');
-
-  return {
-    searchIsCached: data.get('searchResults').has(searchText),
-    searchResults: filterSearchResults(data, searchText, selectedItems),
-    searchText,
-    selectedItems: selectedItems,
-  };
-}
-
-function filterSearchResults(data, searchText, selectedItems) {
-  return data.get('searchResults')
-    .reduce((results, result) => results.concat(result), Immutable.List())
-    .filter(isNotSelected(selectedItems))
-    .filter(matchesSearchText(searchText));
-}
-
-const matchesSearchText = searchText => result => {
-  const regexp = new RegExp(searchText, 'i');
-  return searchText === '' || result.get('name').match(regexp);
-};
-
-const isNotSelected = selectedItems => result => {
-  const name = result.name;
-  return !selectedItems.find(item => item.get('name') === name);
-};
-
-export default connect(select)(MealCreator);
+export default connect(mealCreationSelector)(MealCreator);

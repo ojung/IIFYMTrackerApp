@@ -7,7 +7,7 @@ import MealItem from './MealItem';
 export default class extends React.Component {
   static propTypes = {
     onClick: React.PropTypes.func,
-    items: React.PropTypes.instanceOf(Immutable.List),
+    items: React.PropTypes.instanceOf(Immutable.Set),
   }
 
   _handleSubmit(item, amount) {
