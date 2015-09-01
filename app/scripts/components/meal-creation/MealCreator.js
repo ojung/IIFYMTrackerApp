@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
+import {LinearProgress} from 'material-ui';
 import {connect} from 'react-redux';
 
 import FilterableSearchResults from './FilterableSearchResults';
@@ -35,6 +36,7 @@ class MealCreator extends React.Component {
 
   render() {
     const {
+      isFetching,
       dispatch,
       searchResults,
       searchText,
@@ -43,6 +45,7 @@ class MealCreator extends React.Component {
 
     return (
       <div>
+        {isFetching ? <LinearProgress mode="indeterminate"/> : <div/>}
         <FloatingActionButton onClick={() =>
           dispatch(storeConsumptionEvent(selectedItems))}/>
         <MealSearchForm
