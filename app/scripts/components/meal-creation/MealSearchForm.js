@@ -7,18 +7,15 @@ export default class extends React.Component {
     searchText: React.PropTypes.string,
   }
 
-  _handleChange(event) {
-    this.props.onUserInput(event.target.value);
-  }
-
   render() {
+    const {onUserInput, searchText} = this.props;
     return (
       <TextField
         type='text'
         hintText='Search...'
-        onChange={this._handleChange.bind(this)}
+        onChange={(event) => onUserInput(event.target.value)}
         style={{width: '100%'}}
-        value={this.props.searchText}/>
+        value={searchText}/>
     );
   }
 }
