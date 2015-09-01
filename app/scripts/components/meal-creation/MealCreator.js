@@ -43,6 +43,12 @@ class MealCreator extends React.Component {
       selectedItems,
     } = this.props;
 
+    const selectedItemsElement = (
+      <SelectedItems
+        items={selectedItems}
+        onClick={(item) => dispatch(removeItem(item))}/>
+    );
+
     return (
       <div>
         {isFetching ? <LinearProgress mode="indeterminate"/> : <div/>}
@@ -51,9 +57,7 @@ class MealCreator extends React.Component {
         <MealSearchForm
           searchText={searchText}
           onUserInput={(text) => dispatch(updateSearchText(text))}/>
-        <SelectedItems
-          items={selectedItems}
-          onClick={(item) => dispatch(removeItem(item))}/>
+        {(selectedItems.size > 0) ? selectedItemsElement : <div/>}
         <FilterableSearchResults
           items={searchResults}
           onClick={(item) => {
