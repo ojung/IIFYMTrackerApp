@@ -62,7 +62,7 @@ const receiveSearchResults = searchText => searchResults => {
     dispatch(receiveResults(searchResults, searchText));
     dispatch(setIsFetching(false));
   };
-}
+};
 
 function receiveResults(searchResults, searchText) {
   return {
