@@ -52,7 +52,7 @@ const filteredSearchResultsSelector = immutableCreateSelector([
 
 const isCachedSelector = immutableCreateSelector(
   [searchTextSelector, searchResultsSelector],
-  (searchText, searchResults) => searchResults.has(searchText)
+  (searchText, searchResults) => searchResults.has(searchText.trim())
 );
 
 const mealCreationSelector = immutableCreateSelector([

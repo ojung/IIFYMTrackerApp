@@ -31,7 +31,7 @@ class MealCreator extends React.Component {
       return;
     }
 
-    dispatch(searchFood(searchText));
+    dispatch(searchFood(searchText.trim()));
   }
 
   render() {
