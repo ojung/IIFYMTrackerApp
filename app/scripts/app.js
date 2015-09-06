@@ -19,12 +19,11 @@ const ThemeManager = new mui.Styles.ThemeManager();
 injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
+  applyMiddleware(promise, thunk),
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
-  createStore,
-);
-const store =
-  applyMiddleware(promise, thunk)(decoratedCreateStore)(rootReducer);
+)(createStore);
+const store = decoratedCreateStore(rootReducer);
 
 class App extends React.Component {
   static childContextTypes = {
