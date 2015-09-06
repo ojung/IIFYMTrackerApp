@@ -1,64 +1,65 @@
 import Immutable from 'immutable';
 import React from 'react';
+import {LinearProgress} from 'material-ui';
 import {connect} from 'react-redux';
 
 import FilterableSearchResults from './FilterableSearchResults';
 import FloatingActionButton from '../FloatingActionButton';
 import MealSearchForm from './MealSearchForm';
 import SelectedItems from './SelectedItems';
+import mealCreationSelector from '../../selectors/meal-creation';
 import {
   addItem,
   removeItem,
+  searchFood,
   storeConsumptionEvent,
   updateSearchText,
 } from '../../actions/meal-creation';
 
-const SEARCHRESULTS = Immutable.fromJS([
-  {name: 'Potatoes'},
-  {name: 'Chicken Breast'},
-  {name: 'Brussel Sprouts'},
-  {name: 'Beef'},
-  {name: 'Doener Kebab'},
-  {name: 'Falafel'},
-  {name: 'Schawarma'},
-  {name: 'Kumpir'},
-  {name: 'Burger'},
-  {name: 'Nudelz'},
-  {name: 'Capsicum'},
-  {name: 'Zuckerpo'},
-  {name: 'Cadbury'},
-  {name: 'Malteser'},
-  {name: 'Pizza'},
-], (key, value) => {
-  const isIndexed = Immutable.Iterable.isIndexed(value);
-  return isIndexed ? value.toList() : value.toOrderedMap();
-});
-
 class MealCreator extends React.Component {
   static propTypes = {
     searchText: React.PropTypes.string,
-    selectedItems: React.PropTypes.instanceOf(Immutable.Set),
+    isCached: React.PropTypes.bool.isRequired,
+    selectedItems: React.PropTypes.instanceOf(Immutable.Set).isRequired,
+    searchResults: React.PropTypes.instanceOf(Immutable.Set).isRequired,
+  }
+
+  componentDidUpdate() {
+    const {dispatch, isCached, searchText} = this.props;
+
+    if (searchText.length <= 3 || isCached) {
+      return;
+    }
+
+    dispatch(searchFood(searchText.trim()));
   }
 
   render() {
-    const {dispatch, selectedItems, searchText} = this.props;
+    const {
+      isFetching,
+      dispatch,
+      searchResults,
+      searchText,
+      selectedItems,
+    } = this.props;
 
-    const filteredResults = SEARCHRESULTS
-      .filter(isNotSelected(selectedItems))
-      .filter(matchesSearchText(searchText));
+    const selectedItemsElement = (
+      <SelectedItems
+        items={selectedItems}
+        onClick={(item) => dispatch(removeItem(item))}/>
+    );
 
     return (
       <div>
+        {isFetching ? <LinearProgress mode="indeterminate"/> : <div/>}
         <FloatingActionButton onClick={() =>
-            dispatch(storeConsumptionEvent(selectedItems))}/>
+          dispatch(storeConsumptionEvent(selectedItems))}/>
         <MealSearchForm
           searchText={searchText}
           onUserInput={(text) => dispatch(updateSearchText(text))}/>
-        <SelectedItems
-          items={selectedItems}
-          onClick={(item) => dispatch(removeItem(item))}/>
+        {(selectedItems.size > 0) ? selectedItemsElement : <div/>}
         <FilterableSearchResults
-          items={filteredResults}
+          items={searchResults}
           onClick={(item) => {
             dispatch(addItem(item));
             dispatch(updateSearchText(''));
@@ -68,22 +69,4 @@ class MealCreator extends React.Component {
   }
 }
 
-const matchesSearchText = searchText => result => {
-  const regexp = new RegExp(searchText, 'i');
-  return searchText === '' || result.get('name').match(regexp);
-};
-
-const isNotSelected = selectedItems => result => {
-  const name = result.get('name');
-  return !selectedItems.find((item) => item.get('name') === name);
-};
-
-function select(state) {
-  const ui = state.get('ui');
-  return {
-    selectedItems: ui.get('selectedItems'),
-    searchText: ui.get('searchText'),
-  };
-}
-
-export default connect(select)(MealCreator);
+export default connect(mealCreationSelector)(MealCreator);

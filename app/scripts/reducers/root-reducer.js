@@ -1,6 +1,12 @@
 import Immutable from 'immutable';
 
-import {searchText, selectedItems, consumptionEvents} from './meal-creation';
+import {
+  consumptionEvents,
+  isFetching,
+  searchResults,
+  searchText,
+  selectedItems,
+} from './meal-creation';
 import {
   age,
   height,
@@ -25,6 +31,7 @@ function ui(state, action) {
   return Immutable.Map({
     age: age(state.get('age'), action),
     height: height(state.get('height'), action),
+    isFetching: isFetching(state.get('isFetching'), action),
     physicalActivityFactor:
       physicalActivityFactor(state.get('physicalActivityFactor'), action),
     searchText: searchText(state.get('searchText'), action),
@@ -38,5 +45,6 @@ function data(state, action) {
   return Immutable.Map({
     consumptionEvents:
       consumptionEvents(state.get('consumptionEvents'), action),
+    searchResults: searchResults(state.get('searchResults'), action),
   });
 }

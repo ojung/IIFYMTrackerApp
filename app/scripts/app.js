@@ -4,25 +4,27 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import mui from 'material-ui';
 import {DevTools, DebugPanel, LogMonitor} from 'redux-devtools/lib/react';
 import {Provider} from 'react-redux';
-import {compose, createStore} from 'redux';
+import {applyMiddleware, compose, createStore} from 'redux';
 import {devTools, persistState} from 'redux-devtools';
 
 import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
+import promise from './middlewares/promise';
 import rootReducer from './reducers/root-reducer';
+import thunk from './middlewares/thunk';
 
 const ThemeManager = new mui.Styles.ThemeManager();
-
 injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
-  createStore
+  createStore,
 );
-const store = decoratedCreateStore(rootReducer);
+const store =
+  applyMiddleware(promise, thunk)(decoratedCreateStore)(rootReducer);
 
 class App extends React.Component {
   static childContextTypes = {
