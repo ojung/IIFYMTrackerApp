@@ -18,7 +18,7 @@ export default class extends React.Component {
 
   _getData = () => {
     const data = this.props.data.map((event) => {
-      return event.get('energyValue');
+      return event.get('totalEnergy');
     })
     .toArray();
 
