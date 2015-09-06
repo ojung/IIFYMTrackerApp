@@ -15,7 +15,7 @@ const searchResultSetSelector = immutableCreateSelector(
   searchResultsSelector,
   (searchResults) => {
     return searchResults
-      .reduce((results, result) => results.union(result), Immutable.Set());
+      .reduce((results, result) => results.union(Immutable.Set(result)), Immutable.Set());
   }
 );
 

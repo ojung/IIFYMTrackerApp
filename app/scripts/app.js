@@ -11,6 +11,7 @@ import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
+import persist from './persist';
 import promise from './middlewares/promise';
 import rootReducer from './reducers/root-reducer';
 import thunk from './middlewares/thunk';
@@ -20,6 +21,7 @@ injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
   applyMiddleware(promise, thunk),
+  persist,
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
 )(createStore);
