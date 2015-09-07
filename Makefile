@@ -35,6 +35,10 @@ dist/fonts: app/fonts
 watch:
 	$(WATCHIFY) --verbose -o $(TARGET) -t [ $(BABELIFY) ] -- $(SCRIPTS)
 
+bundle: compile dist/scripts/bundle.js
+dist/scripts/bundle.js: dist/scripts/app.js
+	java -jar share/compiler.jar --js $< --js_output_file $@ --language_in ECMASCRIPT5 --compilation_level SIMPLE_OPTIMIZATIONS
+
 lint:
 	$(ESLINT) $(SCRIPTS)
 
