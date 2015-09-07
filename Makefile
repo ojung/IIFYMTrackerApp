@@ -2,7 +2,7 @@ BIN = ./node_modules/.bin
 BROWSERIFY = $(BIN)/browserify
 WATCHIFY = $(BIN)/watchify
 ESLINT = $(BIN)/eslint
-BABELIFY = babelify --stage 0
+BABELIFY = babelify
 
 SOURCE = app/scripts/app.js
 TARGET = dist/scripts/app.js
@@ -42,6 +42,12 @@ dist/scripts/bundle.js: dist/scripts/app.js
 lint:
 	$(ESLINT) $(SCRIPTS)
 
+test:
+	NODE_ENV=testing npm test
+
+install:
+	npm install
+
 compile: scripts html css fonts
 
-.PHONY: compile watch lint scripts css html
+.PHONY: bundle install compile watch lint scripts css html test

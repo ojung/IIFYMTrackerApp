@@ -39,7 +39,7 @@ export function storeMeal(items) {
     dispatch(setIsFetching(true));
 
     const promises = orderedItems.map(fetchNutrients);
-    Promise.all(promises)
+    return Promise.all(promises)
       .then(mergeNutrients(orderedItems))
       .then(mergedItems => {
         dispatch(storeConsumptionEvent(mergedItems));
