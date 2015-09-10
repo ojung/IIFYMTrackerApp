@@ -15,19 +15,36 @@ describe('persist local storage store enhancer', () => {
     return {storage, store};
   };
 
-  it('should write state to the storage', withContext(getStoreAndStorage, (done, context) => {
+  it('should write state to the storage', withContext(getStoreAndStorage, (context, done) => {
     const {store, storage} = context;
     const debounceIntervalInMs = 1;
 
-    persist(storage, debounceIntervalInMs)(() => store)(() => {}, {});
+    persist(storage, debounceIntervalInMs)(() => store)({}, Immutable.fromJS({}));
 
     const state = {data: 'data', ui: 'iu'};
     store.setState(Immutable.Map(state))
 
     // Needed, because perist is debounced
     setTimeout(() => {
-      assert.equal(storage.getItem('redux-store'), JSON.stringify(state));
+      assert.equal(storage.getItem('redux-store'), JSON.stringify(state),
+                   'unexpected storage contents');
       done();
     }, debounceIntervalInMs + 1);
+  }));
+
+  const getStorage = () => new MockLocalStorage();
+
+  it('should merge localState and initalState', withContext(getStorage, (storage, done) => {
+    const localState = {data: {local: 'data'}};
+    storage.setItem('redux-store', JSON.stringify(localState))
+
+    const initalState = Immutable.fromJS({data: {}, ui: {}});
+
+    persist(storage, 1)((reducer, state) => {
+      const expectedState = Immutable.fromJS(Object.assign({}, localState, {ui: {}}));
+      assert(Immutable.is(state, expectedState), 'unexpected initalState');
+      done();
+      return new MockStore();
+    })({}, initalState);
   }));
 });

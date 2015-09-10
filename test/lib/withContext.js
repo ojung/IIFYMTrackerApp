@@ -1,5 +1,5 @@
 const withContext = (getContext, test) => done => {
   const context = getContext();
-  test(done, context)
+  test(context, done)
 };
 export default withContext;
