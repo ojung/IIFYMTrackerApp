@@ -3,7 +3,7 @@ import Kefir from 'kefir';
 
 const persist = (storage, debounceInterval) => next => (reducer, initalState) => {
   const localState = rehydrate(storage.getItem('redux-store'));
-  const state = localState.merge(initalState);
+  const state = initalState.merge(localState);
   const store = next(reducer, state);
 
   dataStream(store)
