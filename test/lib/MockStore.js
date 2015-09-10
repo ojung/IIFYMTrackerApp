@@ -3,12 +3,9 @@ export default class {
     this.subscriber = subscriber;
   }
 
-  triggerChange() {
-    this.subscriber();
-  }
-
   setState(state) {
     this.state = state;
+    this.subscriber();
   }
 
   getState() {

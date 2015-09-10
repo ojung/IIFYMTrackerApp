@@ -12,7 +12,7 @@ const persist = (storage, debounceInterval) => next => (reducer, initalState) =>
     .onValue(saveToStorage(storage));
 
   return {...store};
-}
+};
 export default persist;
 
 const rehydrate = state => {
