@@ -21,7 +21,7 @@ injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
   applyMiddleware(promise, thunk),
-  persist,
+  //persist,
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
 )(createStore);
