@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import {Dialog, ListItem, TextField} from 'material-ui';
 
@@ -33,7 +32,7 @@ export default class extends React.Component {
 
   _onChange(event) {
     const newAmount = event.target.value;
-    this.setState(_.extend({}, this.state, {amount: newAmount}));
+    this.setState({...this.state, amount: newAmount});
   }
 
   render() {
