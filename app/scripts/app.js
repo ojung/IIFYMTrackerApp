@@ -5,7 +5,7 @@ import mui from 'material-ui';
 import {DevTools, DebugPanel, LogMonitor} from 'redux-devtools/lib/react';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore} from 'redux';
-import {devTools, persistState} from 'redux-devtools';
+import {devTools} from 'redux-devtools';
 
 import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
@@ -25,7 +25,6 @@ const decoratedCreateStore = compose(
   persist(window.localStorage, 250),
   exposeObservable,
   devTools(),
-  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
 )(createStore);
 const store = decoratedCreateStore(rootReducer);
 
