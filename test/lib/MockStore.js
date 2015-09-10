@@ -1,4 +1,8 @@
+import Kefir from 'kefir';
+
 export default class {
+  subscriber = () => {}
+
   subscribe(subscriber) {
     this.subscriber = subscriber;
   }
@@ -10,5 +14,9 @@ export default class {
 
   getState() {
     return this.state;
+  }
+
+  eventStream() {
+    return Kefir.constant(this.state);
   }
 };

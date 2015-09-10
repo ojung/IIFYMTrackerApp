@@ -1,30 +1,12 @@
-import Immutable from 'immutable';
-import Kefir from 'kefir';
+export default function(storage, debounceInterval) {
+  return createStore => (reducer, initalState) => {
+    const store = createStore(reducer, initalState);
 
-const persist = (storage, debounceInterval) => next => (reducer, initalState) => {
-  const localState = rehydrate(storage.getItem('redux-store'));
-  const state = initalState.merge(localState);
-  const store = next(reducer, state);
+    store.eventStream()
+      .debounce(debounceInterval)
+      .map(state => JSON.stringify(state.toJS()))
+      .onValue(state => storage.setItem('redux-store', state));
 
-  dataStream(store)
-    .debounce(debounceInterval)
-    .map(serialize)
-    .onValue(saveToStorage(storage));
-
-  return {...store};
-};
-export default persist;
-
-const rehydrate = state => {
-  const localState = state && JSON.parse(state) || {};
-  return Immutable.fromJS(localState);
-};
-
-const serialize = state => JSON.stringify(state.toJS());
-
-const saveToStorage = storage => state => storage.setItem('redux-store', state);
-
-const dataStream = store => Kefir.stream(listener(store));
-
-const listener = store => emitter =>
-  store.subscribe(() => emitter.emit(store.getState()));
+    return {...store};
+  };
+}
