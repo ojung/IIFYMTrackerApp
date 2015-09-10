@@ -5,4 +5,3 @@ const thunk = store => next => action => {
   return action(store.dispatch, store.getState());
 };
 export default thunk;
-
