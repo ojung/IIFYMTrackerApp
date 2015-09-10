@@ -22,7 +22,7 @@ injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
   applyMiddleware(promise, thunk),
-  persist(window.localStorage, 250),
+  persist(window.localStorage, 'redux',  250),
   exposeObservable,
   devTools(),
 )(createStore);
