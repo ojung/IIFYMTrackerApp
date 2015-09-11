@@ -8,6 +8,8 @@ export const SET_IS_FETCHING = 'SET_IS_FETCHING';
 export const STORE_CONSUMPTION_EVENT = 'STORE_CONSUMPTION_EVENT';
 export const UPDATE_SEARCHTEXT = 'UPDATE_SEARCHTEXT';
 
+const apiUrl = '//localhost:3000';
+
 export function addItem(item) {
   return {
     item,
@@ -29,7 +31,34 @@ export function updateSearchText(text) {
   };
 }
 
-export function storeConsumptionEvent(foodItems) {
+
+export function storeMeal(items) {
+  const orderedItems = items.toList();
+
+  return dispatch => {
+    dispatch(setIsFetching(true));
+
+    const promises = orderedItems.map(fetchNutrients);
+    return Promise.all(promises)
+      .then(mergeNutrients(orderedItems))
+      .then(mergedItems => {
+        dispatch(storeConsumptionEvent(mergedItems));
+        dispatch(setIsFetching(false));
+      });
+  };
+}
+
+const mergeNutrients = foodItems => nutrients => {
+  return foodItems.zipWith((a, b) => a.concat(b), nutrients);
+};
+
+function fetchNutrients(item) {
+  return fetch(`${apiUrl}/nutrients/${item.get('ndbno')}`)
+    .then(response => response.json())
+    .then(Immutable.fromJS);
+}
+
+function storeConsumptionEvent(foodItems) {
   return {
     foodItems,
     type: STORE_CONSUMPTION_EVENT,
@@ -46,7 +75,7 @@ export function searchFood(searchText) {
 
     dispatch(setIsFetching(true));
 
-    const promise = fetch('//localhost:3000/search?q=' + searchText)
+    const promise = fetch(`${apiUrl}/search?q=${searchText}`)
       .then(response => response.json())
       .then(Immutable.fromJS)
       .then(searchResults =>

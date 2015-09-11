@@ -37,12 +37,21 @@ export function consumptionEvents(state = Immutable.List(), action) {
 }
 
 function consumptionEvent(foodItems) {
-  const totalEnergy = foodItems.reduce((item, acc) => acc + item.energyValue);
+  const totalEnergy = foodItems.reduce((acc, item) => {
+    const nutrients = item.get('nutrients');
+    const energy =
+      nutrients.find(nutrient => nutrient.get('name') === 'Energy');
+    return acc + getEnergyValue(item.get('amount'), energy.get('value'));
+  }, 0);
   return Immutable.Map({
     consumedItems: foodItems,
     totalEnergy,
     dateTime: moment(),
   });
+}
+
+function getEnergyValue(amount, energy) {
+  return (Number(amount) / 100) * Number(energy);
 }
 
 export function searchResults(state = Immutable.Map(), action) {

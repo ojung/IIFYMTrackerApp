@@ -5,12 +5,15 @@ import mui from 'material-ui';
 import {DevTools, DebugPanel, LogMonitor} from 'redux-devtools/lib/react';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore} from 'redux';
-import {devTools, persistState} from 'redux-devtools';
+import {devTools} from 'redux-devtools';
 
 import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
+import getInitalState from './getInitalState';
+import persist from './persist';
+import exposeObservable from './exposeObservable';
 import promise from './middlewares/promise';
 import rootReducer from './reducers/root-reducer';
 import thunk from './middlewares/thunk';
@@ -19,12 +22,12 @@ const ThemeManager = new mui.Styles.ThemeManager();
 injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
+  applyMiddleware(promise, thunk),
+  persist(window.localStorage, 'redux', 250),
+  exposeObservable,
   devTools(),
-  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
-  createStore,
-);
-const store =
-  applyMiddleware(promise, thunk)(decoratedCreateStore)(rootReducer);
+)(createStore);
+const store = decoratedCreateStore(rootReducer, getInitalState(window.localStorage, 'redux'));
 
 class App extends React.Component {
   static childContextTypes = {
@@ -54,7 +57,7 @@ class App extends React.Component {
         </div>
         {
           <DebugPanel top right bottom>
-            <DevTools store={store} monitor={LogMonitor}/>
+            <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false}/>
           </DebugPanel>
         }
       </div>

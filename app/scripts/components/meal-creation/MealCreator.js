@@ -12,7 +12,7 @@ import {
   addItem,
   removeItem,
   searchFood,
-  storeConsumptionEvent,
+  storeMeal,
   updateSearchText,
 } from '../../actions/meal-creation';
 
@@ -53,7 +53,7 @@ class MealCreator extends React.Component {
       <div>
         {isFetching ? <LinearProgress mode="indeterminate"/> : <div/>}
         <FloatingActionButton onClick={() =>
-          dispatch(storeConsumptionEvent(selectedItems))}/>
+          dispatch(storeMeal(selectedItems))}/>
         <MealSearchForm
           searchText={searchText}
           onUserInput={(text) => dispatch(updateSearchText(text))}/>

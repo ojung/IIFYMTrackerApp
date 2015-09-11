@@ -14,7 +14,7 @@ export default class extends React.Component {
 
   _getSum(events, filter) {
     return events
-      .map((event) => event.get('energyValue'))
+      .map((event) => event.get('totalEnergy'))
       .filter(filter)
       .reduce((acc, value) => acc + value);
   }

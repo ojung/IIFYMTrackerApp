@@ -13,16 +13,13 @@ const isFetchingSelector = state => state.get('ui').get('isFetching');
 
 const searchResultSetSelector = immutableCreateSelector(
   searchResultsSelector,
-  (searchResults) => {
-    return searchResults
-      .reduce((results, result) => results.union(result), Immutable.Set());
-  }
+  (searchResults) =>
+    searchResults.reduce((results, result) => results.union(Immutable.Set(result)), Immutable.Set())
 );
 
 const selectedSearchResultsSelector = immutableCreateSelector(
   [selectedItemsSelector, searchResultSetSelector],
-  (selectedItems, searchResults) =>
-    searchResults.filter(isSelected(selectedItems))
+  (selectedItems, searchResults) => searchResults.filter(isSelected(selectedItems))
 );
 
 const isSelected = selectedItems => result => {
@@ -45,9 +42,8 @@ const filteredSearchResultsSelector = immutableCreateSelector([
   selectedSearchResultsSelector,
   searchResultSetSelector,
 ], (notMatchingSearchResults, selectedSearchResults, searchResults) => {
-  return searchResults
-    .subtract(notMatchingSearchResults.union(selectedSearchResults))
-    .take(50);
+  const subtractor = notMatchingSearchResults.union(selectedSearchResults);
+  return searchResults.subtract(subtractor).take(50);
 });
 
 const isCachedSelector = immutableCreateSelector(
