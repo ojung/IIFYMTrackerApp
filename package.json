@@ -30,7 +30,9 @@
     "react-router": "^0.13.3",
     "react-tap-event-plugin": "^0.1.7",
     "redux": "^2.0.0",
-    "reselect": "0.0.2"
+    "reselect": "0.0.2",
+    "transit-immutable-js": "^0.4.0",
+    "transit-js": "^0.8.831"
   },
   "browserify": {
     "transform": [

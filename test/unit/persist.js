@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import Immutable from 'immutable';
+import transit from 'transit-immutable-js';
 
 import persist from '../../app/scripts/persist';
 
@@ -18,15 +19,16 @@ describe('persist local storage store enhancer', () => {
   it('should write state to the storage', withContext(getStoreAndStorage, (context, done) => {
     const {store, storage} = context;
 
-    const state = {data: 'data', ui: 'iu'};
-    store.setState(Immutable.Map(state))
+    const state = Immutable.Map({data: 'data', ui: 'iu'});
+    store.setState(state);
 
+    const storageKey = 'test';
     const debounceIntervalInMs = 1;
-    persist(storage, debounceIntervalInMs)(() => store)();
+    persist(storage, storageKey, debounceIntervalInMs)(() => store)();
 
     // Needed, because perist is debounced
     setTimeout(() => {
-      assert.equal(storage.getItem('redux-store'), JSON.stringify(state),
+      assert.equal(storage.getItem(storageKey), transit.toJSON(state),
                    'unexpected storage contents');
       done();
     }, debounceIntervalInMs + 1);

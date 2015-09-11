@@ -11,6 +11,7 @@ import Home from './components/home/Home';
 import MealCreator from './components/meal-creation/MealCreator';
 import Menu from './components/Menu';
 import TeeCalculator from './components/tee-calculation/TeeCalculator';
+import getInitalState from './getInitalState';
 import persist from './persist';
 import exposeObservable from './exposeObservable';
 import promise from './middlewares/promise';
@@ -22,11 +23,11 @@ injectTapEventPlugin();
 
 const decoratedCreateStore = compose(
   applyMiddleware(promise, thunk),
-  persist(window.localStorage, 'redux',  250),
+  persist(window.localStorage, 'redux', 250),
   exposeObservable,
   devTools(),
 )(createStore);
-const store = decoratedCreateStore(rootReducer);
+const store = decoratedCreateStore(rootReducer, getInitalState(window.localStorage, 'redux'));
 
 class App extends React.Component {
   static childContextTypes = {

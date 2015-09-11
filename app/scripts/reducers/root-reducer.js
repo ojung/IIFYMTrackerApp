@@ -15,12 +15,7 @@ import {
   weight,
 } from './tee-calculation';
 
-const initialState = Immutable.Map({
-  ui: Immutable.Map(),
-  data: Immutable.Map(),
-});
-
-export default function(state = initialState, action) {
+export default function(state, action) {
   return Immutable.Map({
     ui: ui(state.get('ui'), action),
     data: data(state.get('data'), action),
